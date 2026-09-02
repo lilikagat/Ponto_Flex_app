@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#08192e">
+  <meta name="description" content="PontoFlex: acompanhamento pessoal de jornada, registros de ponto e demonstrativo de pagamento.">
+  <title>PontoFlex — Gestão de jornada</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .nav-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .nav-icon svg {
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo principal</a>
+
+  <aside class="sidebar" aria-label="Navegação principal">
+    <div class="brand" aria-label="PontoFlex, gestão de jornada">
+      <strong aria-hidden="true">PF</strong>
+      <span>PontoFlex<small>Gestão de jornada</small></span>
+    </div>
+
+    <nav id="menu" class="primary-nav" aria-label="Seções da aplicação">
+      <button type="button" data-tab="jornada" class="active" aria-current="page">
+        <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><span>Jornada</span>
+      </button>
+      <button type="button" data-tab="contracheque">
+        <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l3 3v15H6z"></path><path d="M15 3v4h4"></path><path d="M9 12h6"></path><path d="M9 16h6"></path><path d="M9 8h2"></path></svg></span><span>Contracheque</span>
+      </button>
+      <button type="button" data-tab="configuracoes">
+        <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.1A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3v-4h.1A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.1A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.4.3.8.7 1 1.2.1.3.2.6.2.9v1.8a1.7 1.7 0 0 0-1.2 2.1z"></path></svg></span><span>Configurações</span>
+      </button>
+    </nav>
+  </aside>
+
+  <main id="app" tabindex="-1">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">PONTO ELETRÔNICO PESSOAL</p>
+        <h1 id="titulo">Minha jornada</h1>
+      </div>
+      <button id="novo" type="button" class="primary" aria-haspopup="dialog">
+        <span>Registrar dia</span><span class="button-icon" aria-hidden="true">+</span>
+      </button>
+    </header>
+
+    <section id="competencia" class="competency" aria-labelledby="competencia-titulo">
+      <h2 id="competencia-titulo" class="visually-hidden">Selecionar competência</h2>
+      <button id="mesAnterior" type="button" aria-label="Mês anterior">‹</button>
+      <label for="mes">
+        <span>Competência</span>
+        <input id="mes" type="month" aria-describedby="periodo">
+        <small id="periodo" aria-live="polite"></small>
+      </label>
+      <button id="mesSeguinte" type="button" aria-label="Próximo mês">›</button>
+    </section>
+
+    <section id="jornada" class="page active" aria-labelledby="jornada-titulo">
+      <h2 id="jornada-titulo" class="visually-hidden">Resumo da jornada</h2>
+      <div class="toolbar">
+        <button id="imprimirPonto" type="button">▤ <span>Imprimir folha de ponto</span></button>
+      </div>
+      <div id="metricas" class="metrics" aria-label="Resumo da competência"></div>
+      <section class="card" aria-labelledby="registros-titulo">
+        <div class="cardhead">
+          <div>
+            <h2 id="registros-titulo">Registros da competência</h2>
+            <p>Jornadas, intervalos, diárias, folgas e faltas.</p>
+          </div>
+          <mark id="qtdDias" aria-live="polite">0 dias</mark>
+        </div>
+        <div id="registros"></div>
+      </section>
+    </section>
+
+    <section id="contracheque" class="page" aria-labelledby="contracheque-titulo" hidden>
+      <h2 id="contracheque-titulo" class="visually-hidden">Contracheque</h2>
+      <div class="toolbar">
+        <button id="imprimirContra" type="button" class="primary">Imprimir / Salvar PDF</button>
+      </div>
+      <article id="holerite" class="card paycheck" aria-label="Demonstrativo de pagamento"></article>
+    </section>
+
+    <section id="configuracoes" class="page" aria-labelledby="configuracoes-titulo" hidden>
+      <h2 id="configuracoes-titulo" class="visually-hidden">Configurações</h2>
+      <section class="card" aria-labelledby="funcionario-titulo">
+        <div class="cardhead"><h2 id="funcionario-titulo">Funcionário</h2></div>
+        <div class="form">
+          <label for="nome">Nome completo<input id="nome" data-field="nome" autocomplete="name"></label>
+          <label for="cpf">CPF<input id="cpf" data-field="cpf" inputmode="numeric" maxlength="14" autocomplete="off"></label>
+          <label for="cargo">Cargo<input id="cargo" data-field="cargo" autocomplete="organization-title"></label>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="empresa-titulo">
+        <div class="cardhead"><h2 id="empresa-titulo">Empresa</h2></div>
+        <div class="form">
+          <label for="empresa">Nome da empresa<input id="empresa" data-field="empresa" autocomplete="organization"></label>
+          <label for="cnpj">CNPJ<input id="cnpj" data-field="cnpj" inputmode="numeric" maxlength="18" autocomplete="off"></label>
+          <label for="cep">CEP<input id="cep" data-field="cep" inputmode="numeric" maxlength="9" autocomplete="postal-code"></label>
+          <label class="wide" for="endereco">Endereço<input id="endereco" data-field="endereco" autocomplete="street-address"></label>
+          <label for="telefone">Telefone<input id="telefone" data-field="telefone" type="tel" inputmode="tel" autocomplete="tel"></label>
+        </div>
+        <small id="cepStatus" class="field-status" role="status"></small>
+      </section>
+
+      <section class="card" aria-labelledby="regras-titulo">
+        <div class="cardhead"><h2 id="regras-titulo">Regras e descontos</h2></div>
+        <div class="form">
+          <label for="salario">Salário mensal (R$)<input id="salario" data-field="salario" type="number" min="0" step="0.01" inputmode="decimal"></label>
+          <label for="divisor">Divisor mensal<input id="divisor" data-field="divisor" type="number" min="1" step="1" inputmode="numeric"></label>
+          <label for="jornada">Jornada diária (horas)<input id="jornada" data-field="jornada" type="number" min="1" max="24" step="0.1" inputmode="decimal"></label>
+          <label for="adicionalNoturno">Adicional noturno (%)<input id="adicionalNoturno" data-field="adicionalNoturno" type="number" min="0" step="0.1" inputmode="decimal"></label>
+          <label for="vt">Vale-transporte (%)<input id="vt" data-field="vt" type="number" min="0" step="0.1" inputmode="decimal"></label>
+          <label for="vr">Vale-refeição (%)<input id="vr" data-field="vr" type="number" min="0" step="0.1" inputmode="decimal"></label>
+          <label for="adiantamento">Adiantamento (R$)<input id="adiantamento" data-field="adiantamento" type="number" min="0" step="0.01" inputmode="decimal"></label>
+          <label for="outros">Outros descontos (R$)<input id="outros" data-field="outros" type="number" min="0" step="0.01" inputmode="decimal"></label>
+          <label class="check wide" for="inss"><input id="inss" data-field="inss" type="checkbox"> Calcular INSS automaticamente</label>
+        </div>
+      </section>
+
+      <section class="card actions" aria-labelledby="backup-titulo">
+        <h2 id="backup-titulo">Dados e backup</h2>
+        <p class="helper">Exporte uma cópia dos seus dados antes de trocar de dispositivo ou limpar o cadastro.</p>
+        <button id="csv" type="button">Exportar CSV</button>
+        <button id="exportar" type="button">Exportar JSON</button>
+        <button id="importar" type="button">Importar JSON</button>
+        <input id="arquivo" hidden type="file" accept="application/json,.json">
+        <button id="limpar" type="button" class="danger">Limpar tudo</button>
+      </section>
+    </section>
+
+    <footer>Copyright © 2026 PcTech by Sinnomar Lino</footer>
+  </main>
+
+  <nav id="bottom" class="bottom" aria-label="Navegação móvel">
+    <button type="button" data-tab="jornada" class="active" aria-current="page"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span><span>Jornada</span></button>
+    <button type="button" data-tab="contracheque"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l3 3v15H6z"></path><path d="M15 3v4h4"></path><path d="M9 12h6"></path><path d="M9 16h6"></path><path d="M9 8h2"></path></svg></span><span>Contracheque</span></button>
+    <button type="button" data-tab="configuracoes"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.1A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3v-4h.1A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.1A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.4.3.8.7 1 1.2.1.3.2.6.2.9v1.8a1.7 1.7 0 0 0-1.2 2.1z"></path></svg></span><span>Configurações</span></button>
+  </nav>
+
+  <dialog id="modal" aria-labelledby="modal-titulo" aria-describedby="erros">
+    <form method="dialog" id="registroForm">
+      <button class="close" type="submit" value="cancel" aria-label="Fechar janela">×</button>
+      <p class="eyebrow">REGISTRO DIÁRIO</p>
+      <h2 id="modal-titulo">Jornada do dia</h2>
+
+      <fieldset>
+        <legend>Identificação do dia</legend>
+        <div class="form">
+          <label for="data">Data<input id="data" type="date" required></label>
+          <label for="situacao">Situação<select id="situacao">
+            <option value="worked">Trabalhado</option>
+            <option value="dayoff">Folga</option>
+            <option value="absence">Falta</option>
+            <option value="certificate">Atestado</option>
+            <option value="vacation">Férias</option>
+            <option value="holiday">Feriado trabalhado</option>
+          </select></label>
+        </div>
+      </fieldset>
+
+      <fieldset id="intervalosFieldset">
+        <legend>Intervalos</legend>
+        <div id="intervalos"></div>
+        <button id="adicionarIntervalo" type="button">+ Adicionar intervalo</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Valores adicionais</legend>
+        <div class="form">
+          <label for="tipoExtra">Hora extra<select id="tipoExtra"><option value="50">50%</option><option value="100">100%</option></select></label>
+          <label for="diaria">Diária (R$)<input id="diaria" type="number" min="0" step="0.01" inputmode="decimal"></label>
+          <label class="wide" for="observacao">Observação<input id="observacao" maxlength="240"></label>
+        </div>
+      </fieldset>
+
+      <div id="erros" class="errors" role="alert" aria-live="assertive"></div>
+      <div class="modal-actions">
+        <button type="submit" value="cancel">Cancelar</button>
+        <button id="salvarRegistro" type="button" class="primary">Salvar registro</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <script src="script.js"></script>
+</body>
+</html>
